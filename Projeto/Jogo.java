@@ -11,6 +11,7 @@ import java.awt.event.KeyEvent;
 import java.awt.event.KeyListener;
 import java.awt.event.WindowAdapter;
 import java.awt.event.WindowEvent;
+import java.util.Random;
 import javax.media.opengl.GL;
 import javax.media.opengl.GL2;
 import javax.media.opengl.GLAutoDrawable;
@@ -36,7 +37,7 @@ public class Jogo
     }
      
      private double g;
-     private double g1;
+     private double poszinimmigo=-15;
      private double g2;
      private double incG=0.2;
      private boolean left;
@@ -86,11 +87,12 @@ public class Jogo
         gl.glLoadIdentity();
         gl.glTranslated(0,-2.5,-8);
         
-        g1=g1+incG;
-        
-        
-       desenhar(gl); 
-      desenhar_plano(gl);
+        poszinimmigo=poszinimmigo+incG;
+     
+     desenhar_inimigo(gl);       
+     desenhar(gl); 
+     desenhar_plano(gl);
+
        if(right && g <= 2)
            g = g + incG;
        else
@@ -137,18 +139,36 @@ public class Jogo
       gl.glPopMatrix();
     }
     
-    public void desenhar_plano(GL2 gl){
-        gl.glPushMatrix();
+    public void desenhar_inimigo(GL2 gl) {
+      
+       gl.glPushMatrix();
         gl.glColor3f(1, 1, 1);
-        gl.glScaled(7,0,70);
+        gl.glTranslated(0, 0.5, poszinimmigo);
+        gl.glScaled(1,0.75,1);
         glut.glutWireCube(1);
+       gl.glPopMatrix();
+     
+      gl.glPushMatrix();
+       gl.glTranslated(0, 0.5, poszinimmigo);
+       gl.glScaled(0.5,0.5,0.5);
+       gl.glColor3f(0, 1, 1);
+       glut.glutWireCube(1);
+      gl.glPopMatrix();
+    }
+    
+    public void desenhar_plano(GL2 gl){
+        
+        gl.glPushMatrix();
+         gl.glColor3f(1, 1, 1);
+         gl.glScaled(7,0,70);
+         glut.glutWireCube(1);
         gl.glPopMatrix();
         
         gl.glPushMatrix();
-        gl.glTranslated(0, 8, 0);
-        gl.glColor3f(1, 1, 1);
-        gl.glScaled(7,0,50);
-        glut.glutWireCube(1);
+         gl.glTranslated(0, 8, 0);
+         gl.glColor3f(1, 1, 1);
+         gl.glScaled(7,0,50);
+         glut.glutWireCube(1);
         gl.glPopMatrix();
         
     }
