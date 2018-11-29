@@ -11,6 +11,7 @@ import java.awt.event.KeyEvent;
 import java.awt.event.KeyListener;
 import java.awt.event.WindowAdapter;
 import java.awt.event.WindowEvent;
+import java.util.ArrayList;
 import java.util.Random;
 import javax.media.opengl.GL;
 import javax.media.opengl.GL2;
@@ -43,6 +44,7 @@ public class Jogo
      private boolean left;
      private boolean right;
      private boolean tiro;
+     private double vel_tiro;
      
      public Jogo()
     {
@@ -83,15 +85,23 @@ public class Jogo
                    GL.GL_DEPTH_BUFFER_BIT
         );
         
-        
         gl.glLoadIdentity();
         gl.glTranslated(0,-2.5,-8);
         
         poszinimmigo=poszinimmigo+incG;
      
-     desenhar_inimigo(gl);       
+        
+            
      desenhar(gl); 
      desenhar_plano(gl);
+     desenhar_inimigo(gl);      
+     
+     if(tiro == true)
+     {
+         desenhar_tiro(gl);
+         vel_tiro = vel_tiro - 0.2;
+     }
+     
 
        if(right && g <= 2)
            g = g + incG;
@@ -131,14 +141,24 @@ public class Jogo
             gl.glScaled(2,0.75,2);
             glut.glutWireCube(1);
       gl.glPopMatrix();
+      
       gl.glPushMatrix();
       gl.glTranslated(g, 0.5, 0);
             gl.glScaled(0.5,0.5,0.5);
             gl.glColor3f(0, 0, 1);
             glut.glutWireCube(1);
       gl.glPopMatrix();
+      
+      gl.glPushMatrix();
+      gl.glTranslated(g, 0.5, 0);
+            gl.glScaled(0.25,0.25,0.25);
+            gl.glColor3f(0, 1, 2);
+            glut.glutWireCube(1);
+      gl.glPopMatrix();
+            
+      
     }
-    
+    @Override
     public void desenhar_inimigo(GL2 gl) {
       
        gl.glPushMatrix();
@@ -172,6 +192,16 @@ public class Jogo
         gl.glPopMatrix();
         
     }
+    
+    public void desenhar_tiro(GL2 gl) {
+      gl.glPushMatrix();
+       gl.glTranslated(g, 0.5, vel_tiro);
+       gl.glScaled(0.25,0.25,0.25);
+       gl.glColor3f(0, 1, 1);
+       glut.glutWireCube(1);
+      gl.glPopMatrix();
+    }
+    
 
     @Override
     public void keyTyped(KeyEvent e) {
@@ -201,6 +231,9 @@ public class Jogo
         if(e.getKeyCode() == KeyEvent.VK_SPACE){
             tiro = false;
     }
+        if(e.getKeyCode() == KeyEvent.VK_SPACE){
+            tiro=true;
+        }
     
     }
     
