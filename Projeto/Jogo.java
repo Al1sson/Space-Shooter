@@ -31,6 +31,11 @@ public class Jogo
     
     GLU glu = new GLU();
     GLUT glut = new GLUT();
+    Random r = new Random();
+    ArrayList <Inimigo> lista = new ArrayList();
+    
+    
+    long ultimo;
     
      public static void main(String args[])
     {
@@ -38,13 +43,16 @@ public class Jogo
     }
      
      private double g;
-     private double poszinimmigo=-15;
      private double g2;
      private double incG=0.2;
      private boolean left;
      private boolean right;
      private boolean tiro;
      private double vel_tiro;
+     private boolean fimjogo;
+     
+    Inimigo inimigo = new Inimigo();
+    private long ultimoInimigo;
      
      public Jogo()
     {
@@ -77,9 +85,11 @@ public class Jogo
         gl.glEnable(GL.GL_DEPTH_TEST);
     }
     
+    
+    
        @Override
     public void display(GLAutoDrawable glAuto) {
-
+        long tempo = System.currentTimeMillis();
         GL2 gl = glAuto.getGL().getGL2();
         gl.glClear(GL.GL_COLOR_BUFFER_BIT |
                    GL.GL_DEPTH_BUFFER_BIT
@@ -87,14 +97,28 @@ public class Jogo
         
         gl.glLoadIdentity();
         gl.glTranslated(0,-2.5,-8);
-        
-        poszinimmigo=poszinimmigo+incG;
-     
-        
-            
-     desenhar(gl); 
+                   
+     desenhar_nave(gl); 
      desenhar_plano(gl);
-     desenhar_inimigo(gl);      
+     
+     
+     long tempoAtual = System.currentTimeMillis();
+     
+     
+     if(tempoAtual > ultimo + 2000){
+         ultimo=tempoAtual;
+         Inimigo i = new Inimigo();
+         i.x = r.nextInt(3);
+         i.cor=r.nextInt(3);
+         lista.add(i);
+     
+      }
+     
+     for(Inimigo i: lista) {
+         i.mover();
+         i.desenhar_inimigo(gl);
+     }
+        
      
      if(tiro == true)
      {
@@ -134,7 +158,7 @@ public class Jogo
     }
 
     @Override
-    public void desenhar(GL2 gl) {
+    public void desenhar_nave(GL2 gl) {
        gl.glPushMatrix();
        gl.glColor3f(1, 1, 1);
        gl.glTranslated(g, 0.5, 0);
@@ -152,30 +176,11 @@ public class Jogo
       gl.glPushMatrix();
       gl.glTranslated(g, 0.5, 0);
             gl.glScaled(0.25,0.25,0.25);
-            gl.glColor3f(0, 1, 2);
+            gl.glColor3f(1, 0, 1);
             glut.glutWireCube(1);
       gl.glPopMatrix();
             
-      
     }
-    @Override
-    public void desenhar_inimigo(GL2 gl) {
-      
-       gl.glPushMatrix();
-        gl.glColor3f(1, 1, 1);
-        gl.glTranslated(0, 0.5, poszinimmigo);
-        gl.glScaled(1,0.75,1);
-        glut.glutWireCube(1);
-       gl.glPopMatrix();
-     
-      gl.glPushMatrix();
-       gl.glTranslated(0, 0.5, poszinimmigo);
-       gl.glScaled(0.5,0.5,0.5);
-       gl.glColor3f(0, 1, 1);
-       glut.glutWireCube(1);
-      gl.glPopMatrix();
-    }
-    
     public void desenhar_plano(GL2 gl){
         
         gl.glPushMatrix();
@@ -197,7 +202,7 @@ public class Jogo
       gl.glPushMatrix();
        gl.glTranslated(g, 0.5, vel_tiro);
        gl.glScaled(0.25,0.25,0.25);
-       gl.glColor3f(0, 1, 1);
+       gl.glColor3f(1, 0, 1);
        glut.glutWireCube(1);
       gl.glPopMatrix();
     }
@@ -230,9 +235,15 @@ public class Jogo
         }
         if(e.getKeyCode() == KeyEvent.VK_SPACE){
             tiro = false;
-    }
+        }
         if(e.getKeyCode() == KeyEvent.VK_SPACE){
             tiro=true;
+        }
+        if(e.getKeyCode() == KeyEvent.VK_R){
+            fimjogo = false;
+        }
+        if(e.getKeyCode() == KeyEvent.VK_SPACE){
+            fimjogo=true;
         }
     
     }

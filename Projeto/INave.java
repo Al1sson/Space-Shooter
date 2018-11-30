@@ -12,7 +12,6 @@ import javax.media.opengl.GL2;
  * @author EU
  */
 public  interface INave {
-    void desenhar(GL2 gl);
-    void desenhar_inimigo(GL2 gl);
+    void desenhar_nave(GL2 gl);
      
 }
