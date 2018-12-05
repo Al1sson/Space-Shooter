@@ -45,8 +45,8 @@ public class Jogo
      private double g;
      private double g2;
      private double incG=0.2;
-     private boolean left;
-     private boolean right;
+     boolean left;
+     boolean right;
      private boolean tiro;
      private double vel_tiro;
      private boolean fimjogo;
@@ -100,7 +100,9 @@ public class Jogo
                    
      desenhar_nave(gl); 
      desenhar_plano(gl);
-     
+   //  Nave n = new Nave(); 
+   //  n.desenhar_nave(gl);
+   //  n.mover_nave();
      
      long tempoAtual = System.currentTimeMillis();
      
@@ -111,16 +113,16 @@ public class Jogo
          i.x = r.nextInt(3);
          i.cor=r.nextInt(3);
          lista.add(i);
-     
       }
      
      for(Inimigo i: lista) {
          i.mover();
          i.desenhar_inimigo(gl);
      }
-        
+       
      
-     if(tiro == true)
+     
+     if(tiro)
      {
          desenhar_tiro(gl);
          vel_tiro = vel_tiro - 0.2;
